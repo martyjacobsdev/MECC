@@ -1,9 +1,59 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>MECC</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
 
-Welcome to your new app.
+    <MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
+        <thead>
+            <tr>
+                @foreach (var h in headings)
+                {
+                    <th>@h</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in rows)
+            {
+                <tr>
+                    @foreach (var x in row.Split())
+                    {
+                        <td>@x</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </MudSimpleTable>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+</MudContainer>
+
+<style>
+    thead {
+        background-color: steelblue !important;
+        color: white !important;
+    }
+</style>
+
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = true;
+
+    string[] headings = { "Bed", "Status", "Patient", "DOB", "Presenting Issue", "Last comment", "Last update", "Nurse", "Action" };
+
+    string[] rows = {
+        @"1 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"2 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"3 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"4 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"5 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"6 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"7 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+        @"8 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+
+    };
+}
