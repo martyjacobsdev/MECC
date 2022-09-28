@@ -35,7 +35,7 @@ namespace BlazorApp.Api
 
             Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
 
-             return new OkObjectResult(queryResultsLINQ);
+             return new OkObjectResult("it got here");
         }
 
     }
