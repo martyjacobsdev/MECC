@@ -23,7 +23,7 @@
 				if (bed.Status == false)
 				{
 					<tr>
-						<td>@bed.Id</td>
+						<td>@bed.PartitionKey</td>
 						<td>@bed.GetStatusLabel()</td>
 						<td>@bed.Patient.Name</td>
 						<td>@bed.Patient.DateOfBirth</td>
@@ -38,7 +38,7 @@
 				else
 				{
 					<tr>
-						<td>@bed.Id</td>
+						<td>@bed.PartitionKey</td>
 						<td>@bed.GetStatusLabel()</td>
 						<td></td>
 						<td></td>
@@ -46,7 +46,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.Id))"><u>Admit</u></button></td>
+						<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.PartitionKey))"><u>Admit</u></button></td>
 					</tr>
 				}
 			}
@@ -82,6 +82,7 @@
 @code {
 
 	private MaterEmergencyCareCentre mecc = new MaterEmergencyCareCentre();
+	private List<Bed> beds = new List<Bed>();
 
 	private bool dense = false;
 	private bool hover = true;
@@ -95,6 +96,8 @@
 		try
 		{
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
+			beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
+			mecc.Beds = beds;
 		}
 		catch (Exception ex)
 		{
@@ -102,7 +105,7 @@
 		}
 	}
 
-	public void AdmitNewPatient(int bedId) {
+	public void AdmitNewPatient(string bedId) {
 		NavigationManager.NavigateTo("/admit/" + bedId);
 	}
 
