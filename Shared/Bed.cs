@@ -1,12 +1,13 @@
 ﻿using Azure;
+using Azure.Data.Tables;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BlazorApp.Shared
 {
-	public class Bed
-	{
+	public class Bed : ITableEntity
+    {
 		public Bed( bool status, Patient patient)
 		{
 			Status = status;
