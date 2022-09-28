@@ -24,7 +24,7 @@
 				{
 					<tr>
 						<td>@bed.PartitionKey</td>
-						<td>@bed.GetStatusLabel()</td>
+						<td></td>
 						<td>@bed.Patient.Name</td>
 						<td>@bed.Patient.DateOfBirth</td>
 						<td>@bed.Patient.PresentingIssue</td>
@@ -39,7 +39,7 @@
 				{
 					<tr>
 						<td>@bed.PartitionKey</td>
-						<td>@bed.GetStatusLabel()</td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
@@ -82,7 +82,6 @@
 @code {
 
 	private MaterEmergencyCareCentre mecc = new MaterEmergencyCareCentre();
-	private List<Bed> beds = new List<Bed>();
 
 	private bool dense = false;
 	private bool hover = true;
@@ -96,8 +95,8 @@
 		try
 		{
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
-			beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
-			mecc.Beds = beds;
+			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
+			Console.WriteLine(mecc.Beds.Count);
 		}
 		catch (Exception ex)
 		{

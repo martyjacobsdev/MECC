@@ -10,6 +10,7 @@ namespace BlazorApp.Shared
     {
         public MaterEmergencyCareCentre()
         {
+            Beds = new List<Bed>();
         }
         public string PartitionKey { get; set; }
 
