@@ -30,10 +30,9 @@ namespace BlazorApp.Api
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
     ILogger log)
         {
-            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-            TableClient tableClient = new TableClient(connectionString, TableName);
+            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
             
-            //Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
+            Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
 
              return new OkObjectResult("it got here");
         }
