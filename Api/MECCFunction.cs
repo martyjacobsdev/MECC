@@ -16,27 +16,26 @@ using Microsoft.WindowsAzure.Storage;
 using Azure.Data.Tables.Models;
 using Azure;
 using System.Collections.Concurrent;
+using static System.Net.WebRequestMethods;
+using System.IO;
 
 namespace BlazorApp.Api
 {
     public static class MECCFunction
     {
-        [FunctionName("SummaryInformation")]
-        public static IActionResult Run(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-    ILogger log)
+        [FunctionName("Demo")]
+        public static async Task<IActionResult> Run(
+          [HttpTrigger(AuthorizationLevel.Function, "get",
+          "post", Route = null)] HttpRequest request,
+            ILogger logger)
         {
-                var tableClient = new TableClient(
-                new Uri("https://mecc.table.core.windows.net/MaterEmergencyCareCentre"),
-                "MaterEmergencyCareCentre",
-                new TableSharedKeyCredential("mecc", "g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg=="));
-
-                // Create the table in the service.
-                tableClient.Create();
-
-                Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
-                
-                return new OkObjectResult(queryResultsLINQ);
+            logger.LogInformation("An HTTP triggered Azure Function.");
+            string requestBody = String.Empty;
+            using (StreamReader streamReader = new StreamReader(request.Body))
+            {
+                requestBody = await streamReader.ReadToEndAsync();
+            }
+            return new OkObjectResult(!string.IsNullOrEmpty(requestBody));
         }
 
     }
