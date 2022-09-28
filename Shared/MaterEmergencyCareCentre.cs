@@ -10,8 +10,6 @@ namespace BlazorApp.Shared
     {
         public MaterEmergencyCareCentre()
         {
-            Beds = new List<Bed>();
-            InitializeBeds(Beds);
         }
         public string PartitionKey { get; set; }
 
@@ -32,14 +30,6 @@ namespace BlazorApp.Shared
         public int BedsInUse { get; set; }
 
         public int BedsFree { get; set; }
-
-        public void InitializeBeds(List<Bed> beds)
-        {
-            for (int i = 1; i <= 8; i++)
-            {
-                beds.Add(new Bed(i, true, new Patient(i.ToString())));
-            }
-        }
 
         public int GetBedsFree()
         {
