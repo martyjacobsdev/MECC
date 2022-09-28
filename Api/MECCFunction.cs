@@ -16,26 +16,26 @@ using Microsoft.WindowsAzure.Storage;
 using Azure.Data.Tables.Models;
 using Azure;
 using System.Collections.Concurrent;
-using static System.Net.WebRequestMethods;
-using System.IO;
+using System.Net;
 
 namespace BlazorApp.Api
 {
     public static class MECCFunction
     {
-        [FunctionName("Demo")]
-        public static async Task<IActionResult> Run(
-          [HttpTrigger(AuthorizationLevel.Function, "get",
-          "post", Route = null)] HttpRequest request,
-            ILogger logger)
+
+        private const string TableName = "MaterEmergencyCareCentre";
+
+        [FunctionName("SummaryInformation")]
+        public static IActionResult Run(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+    ILogger log)
         {
-            logger.LogInformation("An HTTP triggered Azure Function.");
-            string requestBody = String.Empty;
-            using (StreamReader streamReader = new StreamReader(request.Body))
-            {
-                requestBody = await streamReader.ReadToEndAsync();
-            }
-            return new OkObjectResult(!string.IsNullOrEmpty(requestBody));
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            TableClient tableClient = new TableClient(connectionString, TableName);
+
+            Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
+
+             return new OkObjectResult(queryResultsLINQ);
         }
 
     }
