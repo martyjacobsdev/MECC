@@ -7,6 +7,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
 using BlazorApp.Shared;
+using Azure.Data.Tables;
+using System.Diagnostics;
+using Microsoft.WindowsAzure.Storage;
 
 namespace BlazorApp.Api
 {
@@ -37,17 +40,18 @@ namespace BlazorApp.Api
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            var randomNumber = new Random();
-            var temp = 0;
+            string connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+            
+            // Construct a new TableClient using a TableSharedKeyCredential.
+            var client = new TableClient(
+                new Uri("https://mecc.table.core.windows.net/Beds"),
+                "Beds",
+                new TableSharedKeyCredential("mecc", connectionString));
 
-            var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = temp = randomNumber.Next(-20, 55),
-                Summary = GetSummary(temp)
-            }).ToArray();
+            var result = client.GetEntity<MaterEmergencyCareCentre>("mecc", "0001");
 
             return new OkObjectResult(result);
+
         }
     }
 }

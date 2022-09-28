@@ -43,6 +43,8 @@ else
         try
         {
             forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("/api/WeatherForecast") ?? new WeatherForecast[]{};
+
+
         }
         catch (Exception ex)
         {

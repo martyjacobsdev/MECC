@@ -1,59 +1,108 @@
 ﻿@page "/"
+@using BlazorApp.Shared
+@inject NavigationManager NavigationManager
 
 <PageTitle>MECC</PageTitle>
 
 <MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h1" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
+	<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
 
-    <MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
-        <thead>
-            <tr>
-                @foreach (var h in headings)
-                {
-                    <th>@h</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var row in rows)
-            {
-                <tr>
-                    @foreach (var x in row.Split())
-                    {
-                        <td>@x</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </MudSimpleTable>
+	<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
+		<thead style="background: #173274; color: white;">
+			<tr>
+				@foreach (var h in headings)
+				{
+					<th>@h</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var bed in mecc.Beds)
+			{
+				if (bed.Status == false)
+				{
+					<tr>
+						<td>@bed.Id</td>
+						<td>@bed.GetStatusLabel()</td>
+						<td>@bed.Patient.Name</td>
+						<td>@bed.Patient.DateOfBirth</td>
+						<td>@bed.Patient.PresentingIssue</td>
+						<td></td>
+						<td></td>
+						<td>@bed.Patient.NurseAllocated</td>
+						<td>Comment/Discharge</td>
 
+					</tr>
+				}
+				else
+				{
+					<tr>
+						<td>@bed.Id</td>
+						<td>@bed.GetStatusLabel()</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.Id))"><u>Admit</u></button></td>
+					</tr>
+				}
+			}
+		</tbody>
+	</MudSimpleTable>
+
+
+	<MudCard Class="d-inline-flex mt-8">
+		<MudCardContent>
+			<MudText>Beds Free</MudText>
+			<MudText Typo="Typo.h2">3</MudText>
+		</MudCardContent>
+	</MudCard>
+
+	<MudCard Class="d-inline-flex mt-8 ml-4">
+		<MudCardContent>
+			<MudText>Beds In Use</MudText>
+			<MudText Typo="Typo.h2">4</MudText>
+		</MudCardContent>
+	</MudCard>
+
+	<MudCard Class="d-inline-flex mt-8 ml-4">
+		<MudCardContent>
+			<MudText>Total Patients Admitted Today</MudText>
+			<MudText Typo="Typo.h2">22</MudText>
+		</MudCardContent>
+	</MudCard>
 
 </MudContainer>
 
-<style>
-    thead {
-        background-color: steelblue !important;
-        color: white !important;
-    }
-</style>
+
 
 @code {
-    private bool dense = false;
-    private bool hover = true;
-    private bool striped = false;
-    private bool bordered = true;
 
-    string[] headings = { "Bed", "Status", "Patient", "DOB", "Presenting Issue", "Last comment", "Last update", "Nurse", "Action" };
+	private bool dense = false;
+	private bool hover = true;
+	private bool striped = false;
+	private bool bordered = true;
 
-    string[] rows = {
-        @"1 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"2 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"3 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"4 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"5 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"6 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"7 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-        @"8 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+	private MaterEmergencyCareCentre mecc = new MaterEmergencyCareCentre();
 
-    };
+	string[] headings = { "Bed", "Status", "Patient", "DOB", "Presenting Issue", "Last comment", "Last update", "Nurse", "Action" };
+
+	string[] rows = {
+		@"1 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"2 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"3 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"4 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"5 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"6 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"7 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+		@"8 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+
+	};
+
+	public void AdmitNewPatient(int bedId) {
+		NavigationManager.NavigateTo("/admit/" + bedId);
+	}
+
 }

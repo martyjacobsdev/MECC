@@ -1,0 +1,101 @@
+﻿@page "/admit/{BedId}"
+@using BlazorApp.Shared
+
+@inject NavigationManager NavigationManager
+
+<EditForm Model="NewPatient" OnValidSubmit=OnValidSubmit>
+    <DataAnnotationsValidator />
+
+<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Admit New Patient to Bed @BedId</MudText>
+    <MudItem Class="mt-16">
+            <MudGrid Align="Align.Center">
+                <MudItem xs="12">
+                    <MudTextField T="string" Label="Patient URN" @bind-Value="NewPatient.URN" For="@(() => NewPatient.URN)" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="string" Label="Name" @bind-Value="NewPatient.Name" For="@(() => NewPatient.Name)" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" Label="Date Of Birth" />
+
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField T="string" Label="Presenting Issue" @bind-Value="NewPatient.PresentingIssue" For="@(() => NewPatient.PresentingIssue)" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField T="string" Label="Nurse Allocated" @bind-Value="NewPatient.NurseAllocated" For="@(() => NewPatient.NurseAllocated)" />
+                </MudItem>
+
+                <MudItem Class="d-flex">
+                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Admit Patient</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Error" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Cancel</MudButton>
+
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+
+        @if (success)
+        {
+            <MudText Color="Color.Success">Success</MudText>
+
+
+            <MudText>New Patient Details</MudText>
+            <MudText>@NewPatient.URN</MudText>
+            <MudText>@NewPatient.DateOfBirth</MudText>
+            <MudText>@NewPatient.Name</MudText>
+            <MudText>@NewPatient.NurseAllocated</MudText>
+            <MudText>@NewPatient.PresentingIssue</MudText>
+
+        }
+        else
+        {
+            <MudText Color="@Color.Error">
+                <ValidationSummary />
+            </MudText>
+        }
+
+
+</MudContainer>
+
+</EditForm>
+
+
+
+
+
+@code {
+
+
+
+    [Parameter]
+    public string? BedId { get; set; }
+
+    public DateTime? DoB = null;
+
+    Patient NewPatient = new Patient();
+
+    bool success;
+
+
+    private void NavigateToHomePage()
+    {
+        NewPatient = new Patient(BedId);
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        
+        // add the new patient to the bed
+        //NewPatient.Bed = BedId;
+
+        StateHasChanged();
+    }
+
+
+}
