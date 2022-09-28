@@ -13,22 +13,21 @@ using System.Threading.Tasks;
 
 namespace BlazorApp.Api
 {
-	public static class BedsFunction
+    public static class PatientsFunction
 	{
-        private const string TableName = "Beds";
+        private const string TableName = "Patients";
 
-        [FunctionName("Beds")]
-        public static IActionResult Run(
+        [FunctionName("Patients")]
+        public static IActionResult GetAllPatients(
 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
-
             List<TableEntity> qEntities = new List<TableEntity>();
 
             for (int i = 1; i <= 8; i++)
             {
-                TableEntity qEntity = tableClient.GetEntity<TableEntity>(i.ToString(), "000" + i.ToString());
+                TableEntity qEntity = tableClient.GetEntity<TableEntity>("Patient000" + i.ToString(), "000" + i.ToString());
                 qEntities.Add(qEntity);
             }
 
