@@ -17,7 +17,7 @@ namespace BlazorApp.Api
 	{
         private const string TableName = "Patients";
 
-        [FunctionName("Patients")]
+        [FunctionName("GetAllPatients")]
         public static IActionResult GetAllPatients(
 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
 ILogger log)
@@ -33,5 +33,20 @@ ILogger log)
 
             return new OkObjectResult(qEntities);
         }
+
+        [FunctionName("GetPatientByURN")]
+        public static IActionResult GetPatientByURN(
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, string urn,
+ILogger log)
+        {
+            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
+
+            TableEntity qEntity = tableClient.GetEntity<TableEntity>("mecc", "0001");
+         
+            return new OkObjectResult(qEntity);
+        }
+
+
+
     }
 }
