@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
 using BlazorApp.Shared;
+using Azure.Core.Diagnostics;
 
 namespace BlazorApp.Api
 {
