@@ -30,8 +30,9 @@ namespace BlazorApp.Api
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
     ILogger log)
         {
-            //var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-            //TableClient tableClient = new TableClient(connectionString, TableName);
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            TableClient tableClient = new TableClient(connectionString, TableName);
+            
             //Pageable<MaterEmergencyCareCentre> queryResultsLINQ = tableClient.Query<MaterEmergencyCareCentre>(ent => ent.PartitionKey == "mecc");
 
              return new OkObjectResult("it got here");
