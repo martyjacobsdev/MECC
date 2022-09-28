@@ -44,8 +44,8 @@ namespace BlazorApp.Api
             
             // Construct a new TableClient using a TableSharedKeyCredential.
             var client = new TableClient(
-                new Uri("https://mecc.table.core.windows.net/Beds"),
-                "Beds",
+                new Uri("https://mecc.table.core.windows.net/MaterEmergencyCareCentre"),
+                "MaterEmergencyCareCentre",
                 new TableSharedKeyCredential("mecc", connectionString));
 
             var result = client.GetEntity<MaterEmergencyCareCentre>("mecc", "0001");
