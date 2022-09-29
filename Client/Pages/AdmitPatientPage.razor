@@ -71,8 +71,6 @@
 
 @code {
 
-
-
     [Parameter]
     public string? BedId { get; set; }
 
@@ -91,9 +89,7 @@
     {
         success = true;
 
-        Console.WriteLine("The form was submitted successfully.");
-
-        // Upsert the Patient (currently supports 8 active patients)
+        // Upsert the Patient (currently supports 8 patients)
         try
         {
             NewPatient.PartitionKey = BedId;
@@ -108,6 +104,8 @@
         {
             Console.WriteLine(ex.ToString());
         }
+
+        NavigationManager.NavigateTo("/");
 
         StateHasChanged();
     }

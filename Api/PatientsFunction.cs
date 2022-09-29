@@ -62,8 +62,7 @@ ILogger log)
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
                 qEntity["Name"] = patient.Name;
                 qEntity["PresentingIssue"] = patient.PresentingIssue;
-                qEntity["DateOfBirth"] = patient.DateOfBirth.Value.ToUniversalTime();
-                
+                qEntity["DateOfBirth"] = patient.DateOfBirth.Value.ToUniversalTime();    
                 qEntity["NurseAllocated"] = patient.NurseAllocated;
                 qEntity["URN"] = patient.URN;
 
@@ -108,7 +107,6 @@ ILogger log)
             {
                 // Update the patient row 
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(bedId.ToString(), "000" + bedId);
-
                 qEntity["Name"] = "";
                 qEntity["PresentingIssue"] = "";
                 qEntity["NurseAllocated"] = "";
@@ -123,7 +121,6 @@ ILogger log)
             {
                 return false;
             }
-
         }
     }
 }
