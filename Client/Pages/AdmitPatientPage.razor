@@ -19,8 +19,7 @@
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" Label="Date Of Birth" />
-
+                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" @bind-Date="NewPatient.DateOfBirth" Label="Date Of Birth" />
                 </MudItem>
 
                 <MudItem xs="12">
@@ -74,8 +73,6 @@
 
     [Parameter]
     public string? BedId { get; set; }
-
-    public DateTime? DoB = null;
 
     Patient NewPatient = new Patient();
 
