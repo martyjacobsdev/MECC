@@ -51,15 +51,12 @@ ILogger log)
 
             try
             {
-
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-                qEntity["Name"] = req.Query["Name"];
+                qEntity["Name"] = Name;
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
 
-                TableEntity updatedEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-               
                 return true;
 
             }
