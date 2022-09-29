@@ -52,8 +52,8 @@ else
 				@foreach (var comment in patient.CommentHistory)
 				{
 					<tr>
-						<td>@comment.DateTimeOfComment.Date</td>
-						<td>@comment.DateTimeOfComment.TimeOfDay</td>
+						<td>@comment.DateTimeOfComment.ToLocalTime().Date.ToString("dd-MMM-yyyy")</td>
+						<td>@comment.DateTimeOfComment.ToLocalTime().ToString("hh:mm:ss")</td>
 						<td>@comment.NurseAllocated</td>
 						<td>@comment.CommentDescription</td>
 					</tr>
