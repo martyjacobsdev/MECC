@@ -99,7 +99,7 @@
         {
             NewPatient.PartitionKey = BedId;
             NewPatient.RowKey = "000" + BedId?.ToString();
-            string query = "/api/UpdatePatient/" + NewPatient.PartitionKey + "/" + NewPatient.RowKey + "/" + NewPatient.URN + "/" + NewPatient.Name + "/" + NewPatient.DateOfBirth + "/" + NewPatient.PresentingIssue + "/" + NewPatient.NurseAllocated;
+            string query = "/api/UpdatePatient/" + NewPatient.PartitionKey + "/" + NewPatient.RowKey + "/" + NewPatient.URN + "/" + NewPatient.Name + "/" + NewPatient.DateOfBirth.ToString() + "/" + NewPatient.PresentingIssue + "/" + NewPatient.NurseAllocated;
             bool success = await Http.GetFromJsonAsync<bool>(query);
 
             Console.WriteLine("The outcome of the Update Patient API call was - success = ");

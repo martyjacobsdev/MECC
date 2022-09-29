@@ -43,7 +43,6 @@ ILogger log)
 
         [FunctionName("UpdatePatient")]
         [Route("UpdatePatient/{partitionKey}/{rowKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")]
-
         public static async Task<bool> UpdatePatientAsync(
 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "UpdatePatient/{partitionKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")] HttpRequest req, string partitionKey, string rowKey, string URN, string Name, string DoB, string PresentingIssue, string NurseAllocated,
 ILogger log)
