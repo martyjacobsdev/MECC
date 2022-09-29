@@ -23,12 +23,10 @@ else
         <MudText Typo="Typo.h4" class="mt-8" Align="Align.Center" GutterBottom="true">Patient Detailed Information</MudText>
         <MudPaper Width="100%">
             <MudList Class="mt-8 ml-4">
-                <MudText><b>Name:</b>@patient.Name</MudText>
-                <MudText><b>URN:</b>@patient.URN</MudText>
-                if(@patient.DateOfBirth != null) {
-                <MudText><b>Date of birth:</b>@patient.DateOfBirth?.Date.ToShortDateString()</MudText>
-                    }
-                <MudText><b>Presenting issue:</b>@patient.PresentingIssue</MudText>
+                <MudText><b>Name:</b> @patient.Name</MudText>
+                <MudText><b>URN:</b> @patient.URN</MudText>
+                <MudText><b>Date of birth:</b> @patient.DateOfBirth?.Date.ToShortDateString()</MudText>
+                <MudText><b>Presenting issue:</b> @patient.PresentingIssue</MudText>
             </MudList>
         </MudPaper>
     </MudItem>
