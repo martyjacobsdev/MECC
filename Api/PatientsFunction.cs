@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using Azure;
 using System.Collections.Concurrent;
 using BlazorApp.Shared;
+using Microsoft.Azure.WebJobs.Host;
+using System.Net.Http;
+using System.Net;
 
 namespace BlazorApp.Api
 {
@@ -42,9 +45,8 @@ ILogger log)
         }
 
         [FunctionName("UpdatePatient")]
-        [Route("UpdatePatient/{partitionKey}/{rowKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")]
         public static async Task<bool> UpdatePatientAsync(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "UpdatePatient/{partitionKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")] HttpRequest req, string partitionKey, string rowKey, string URN, string Name, string DoB, string PresentingIssue, string NurseAllocated,
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "")] HttpRequest req, string partitionKey, string rowKey, string URN, string Name, string DoB, string PresentingIssue, string NurseAllocated,
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
@@ -68,6 +70,22 @@ ILogger log)
             {
                 return false;
             }
+        }
+
+
+        [FunctionName("PatientTest")]
+        public static async Task<HttpResponseMessage> PatientTest(
+    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "orchestrators/contoso_function01/{id:int}/{username:alpha}")]
+    HttpRequestMessage req,
+    int id,
+    string username,
+    TraceWriter log)
+        {
+            log.Info("C# HTTP trigger function processed a request.");
+
+            return (id == 0 || string.IsNullOrEmpty(username))
+                ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
+                : req.CreateResponse(HttpStatusCode.OK, "Hello " + id + " " + username);
         }
 
 
