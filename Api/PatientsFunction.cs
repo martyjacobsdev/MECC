@@ -27,7 +27,7 @@ ILogger log)
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
             List<TableEntity> qEntities = new List<TableEntity>();
 
-            Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '1'", maxPerPage: 10);
+            Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '1' or PartitionKey eq '2'", maxPerPage: 10);
 
             foreach (Page<TableEntity> page in queryResultsMaxPerPage.AsPages())
             {
