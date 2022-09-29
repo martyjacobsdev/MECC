@@ -3,6 +3,7 @@ using Azure.Data.Tables;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorApp.Shared
 {
@@ -20,6 +21,8 @@ namespace BlazorApp.Shared
 
         public ETag ETag { get; set; }
 
+        [Required]
+        [StringLength(7, ErrorMessage = "Patient URN must be 7 characters long.")]
         public string URN { get; set; }
 
         public string Name { get; set; }
