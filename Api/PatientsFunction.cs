@@ -43,7 +43,7 @@ ILogger log)
 
         [FunctionName("UpdatePatient")]
         public static bool UpdatePatient(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, Patient newPatient, 
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, Patient newPatient, 
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
