@@ -22,7 +22,7 @@ namespace BlazorApp.Shared
         public ETag ETag { get; set; }
 
         [Required]
-        [StringLength(7, ErrorMessage = "Patient URN must be 7 characters long.")]
+        [StringLength(7, ErrorMessage = "Patient URN must be 7 characters long.", MinimumLength = 7)]
         public string URN { get; set; }
   
         [Required]
