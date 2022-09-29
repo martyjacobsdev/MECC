@@ -44,8 +44,8 @@ else
 							<td></td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
-								<MudButton class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></MudButton>
-								<MudButton class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))" style="margin-top: -25px; display: block;"><u>Discharge</u></MudButton>
+								<button class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></button>
+								<button class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))" style="margin-top: -25px; display: block;"><u>Discharge</u></button>
 							</td>
 
 						</tr>
@@ -163,7 +163,7 @@ else
 		NavigationManager.NavigateTo("/patient-details/" + bedId);
 	}
 
-	public async void DischargePatient(string bedId)
+	public async Task DischargePatient(string bedId)
 	{
 		try
 		{
