@@ -168,7 +168,8 @@ else
 		try
 		{
 			StringContent content = new StringContent(bedId);
-			var result = await Http.PostAsync("/api/DischargePatient", content);
+			//ConfigureAwait to prevent a deadlock 
+			var result = await Http.PostAsync("/api/DischargePatient", content).ConfigureAwait(false);
 
 		} catch(Exception e) {
 
