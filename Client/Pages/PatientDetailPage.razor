@@ -1,5 +1,7 @@
 ﻿@page "/patient-details/{PathParam}"
 @using BlazorApp.Shared
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
@@ -93,14 +95,17 @@ else
 		NavigationManager.NavigateTo("/");
 	}
 
-	private void AddComment()
+	private async void AddComment()
 	{
 		Comment commentObj = new Comment();
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
 		patient.CommentHistory.Add(commentObj);
-		Console.WriteLine(comment);
+
+		string json = JsonSerializer.Serialize(commentObj);
+		StringContent content = new StringContent(json);
+		var result = await Http.PostAsync("/api/AddComment", content);
 
 		StateHasChanged();
 	}
