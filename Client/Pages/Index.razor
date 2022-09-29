@@ -123,12 +123,16 @@ else
 				{
 					if (patient.PartitionKey == bed.PartitionKey)
 					{
+						// set bed property fields
+						if (patient.URN != "" || patient.URN != null)
+						{
+							Console.WriteLine(patient.URN);
+							bed.Status = false;
+							bed.PatientURN = patient.URN;
+						}
+
 						//marry a bed to a patient 
 						bed.Patient = patient;
-						// set bed property fields
-						if(patient.URN != "") 
-						bed.Status = false;
-						bed.PatientURN = patient.URN;
 					} 
 				}
 			}
