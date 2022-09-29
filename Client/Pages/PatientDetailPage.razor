@@ -99,7 +99,11 @@ else
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
+		if (patient.CommentHistory == null) {
+			patient.CommentHistory = new List<Comment>();
+		} else {
 		patient.CommentHistory.Add(commentObj);
+		}
 	}
 
 	protected override async Task OnInitializedAsync()
