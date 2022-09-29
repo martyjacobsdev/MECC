@@ -42,8 +42,10 @@ ILogger log)
         }
 
         [FunctionName("UpdatePatient")]
+        [Route("UpdatePatient/{partitionKey}/{rowKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")]
+
         public static async Task<bool> UpdatePatientAsync(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, Patient newPatient, 
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "UpdatePatient/{partitionKey}/{URN}/{Name}/{DoB}/{PresentingIssue}/{NurseAllocated}")] HttpRequest req, string partitionKey, string rowKey, string URN, string Name, string DoB, string PresentingIssue, string NurseAllocated,
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
@@ -51,11 +53,8 @@ ILogger log)
             try
             {
 
-                string partitionKey = req.Query["partitionKey"];
-                string rowKey = req.Query["rowKey"];
-
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-                qEntity["Name"] = req.Query["newName"];
+                qEntity["Name"] = req.Query["Name"];
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
