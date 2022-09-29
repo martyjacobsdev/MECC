@@ -98,6 +98,7 @@
             string json = JsonSerializer.Serialize(NewPatient);
             StringContent content = new StringContent(json);
             var result = await Http.PostAsync("/api/UpdatePatient", content);
+            NavigationManager.NavigateTo("/");
 
         }
         catch (Exception ex)
@@ -105,7 +106,6 @@
             Console.WriteLine(ex.ToString());
         }
 
-        NavigationManager.NavigateTo("/");
 
         StateHasChanged();
     }
