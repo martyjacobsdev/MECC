@@ -73,6 +73,9 @@ ILogger log)
                 TableEntity meccEntity = await meccTableClient.GetEntityAsync<TableEntity>("1", "0001");
 
                 int? totalAdmittedPatients = meccEntity.GetInt32("TotalPatientsToday");
+                Console.WriteLine("It got here");
+                Console.WriteLine(totalAdmittedPatients);
+
                 meccEntity["TotalPatientsToday"] = totalAdmittedPatients + 1;
 
                 // Since no UpdateMode was passed, the request will default to Merge.
