@@ -91,6 +91,7 @@ ILogger log)
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return false;
             }
         }
@@ -119,6 +120,7 @@ ILogger log)
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return false;
             }
         }

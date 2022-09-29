@@ -110,6 +110,7 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		GetSummaryInformation();
+		await Task.Yield();
 	}
 
 	public async void GetSummaryInformation() {

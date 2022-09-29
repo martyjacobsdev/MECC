@@ -2,6 +2,8 @@
 @using BlazorApp.Shared
 @using System.Text.Json;
 @using System.Text.Json.Serialization;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
@@ -104,9 +106,7 @@ else
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
 		patient.CommentHistory.Add(commentObj);
 
-		string json = JsonSerializer.Serialize(commentObj);
-		StringContent content = new StringContent(json);
-		var result = await Http.PostAsync("/api/AddComment", content);
+		await localStorage.SetItemAsync(patient.URN, patient.CommentHistory);
 
 		StateHasChanged();
 	}
@@ -116,6 +116,7 @@ else
 		try
 		{
 			List<Patient> patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
+			List<Comment> commentHistory = await localStorage.GetItemAsync<List<Comment>>(patient.URN);
 
 			foreach (var patient in patients)
 			{
@@ -124,6 +125,8 @@ else
 					this.patient = patient;
 					if(patient.CommentHistory == null) {
 						patient.CommentHistory = new List<Comment>();
+					} else {
+						patient.CommentHistory = commentHistory;
 					}
 				}
 			}
