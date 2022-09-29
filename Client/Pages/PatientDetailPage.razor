@@ -132,6 +132,7 @@ else
 			var comments = await localStorage.GetItemAsync<string>(patient.URN);
 			patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
 
+			StateHasChanged();
 		}
 		catch (Exception ex)
 		{
