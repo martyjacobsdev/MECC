@@ -94,7 +94,7 @@ ILogger log)
 
         [FunctionName("DischargePatient")]
         public static async Task<bool> DischargePatient(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "DischargedPatient/{bedId:int?}")] HttpRequest req, int bedId,
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "DischargePatient/{bedId:int?}")] HttpRequest req, int bedId,
 ILogger log)
         {
 
@@ -109,7 +109,8 @@ ILogger log)
                 qEntity["PresentingIssue"] = "";
                 qEntity["NurseAllocated"] = "";
                 qEntity["URN"] = "";
-                //other values null 
+                qEntity["DateOfBirth"] = null;
+                qEntity["Timestamp"] = DateTime.UtcNow;
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
