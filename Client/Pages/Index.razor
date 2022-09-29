@@ -171,8 +171,7 @@ else
 		{
 			string query = "/api/DischargePatient/" + bedId;
 			var result = await Http.GetAsync(query);
-
-			Console.WriteLine(result);
+			StateHasChanged();
 
 		} catch(Exception e) {
 
