@@ -86,8 +86,35 @@ ILogger log)
             }
         }
 
+        [FunctionName("DischargePatient")]
+        public static async Task<bool> DischargePatient(
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+ILogger log)
+        {
+
+            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
+
+            try
+            {
+                // Update the patient row 
+                Patient patient = await JsonSerializer.DeserializeAsync<Patient>(req.Body);
+                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
+                qEntity["Name"] = null;
+                qEntity["PresentingIssue"] = null;
+                qEntity["NurseAllocated"] = null;
+                qEntity["URN"] = null;
+                //other values null 
+
+                // Since no UpdateMode was passed, the request will default to Merge.
+                await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
 
-
-    }
+        }
 }

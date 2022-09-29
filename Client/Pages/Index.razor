@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using BlazorApp.Shared
+@using System.Text.Json;
+
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
@@ -153,7 +155,6 @@ else
 	public void AdmitNewPatient(string bedId)
 	{
 		NavigationManager.NavigateTo("/admit/" + bedId);
-		// add +1 to mecc db count
 		// add comment 'Admitted'
 	}
 
@@ -162,11 +163,33 @@ else
 		NavigationManager.NavigateTo("/patient-details/" + bedId);
 	}
 
-	public void DischargePatient(string bedId)
+	public async void DischargePatient(string bedId)
 	{
-		// clear patient and bed object
-		// update azure database
-		// add comment 'Discharged'
+		try
+		{
+
+			Patient patientToDischarge = new Patient();
+
+			// discharge patient from bed
+			foreach (var bed in mecc.Beds)
+			{
+				foreach (var patient in mecc.Patients)
+				{
+					if (patient.PartitionKey == bedId)
+					{
+						patientToDischarge = patient;
+					}
+				}
+			}
+
+			string json = JsonSerializer.Serialize(patientToDischarge);
+			StringContent content = new StringContent(json);
+			var result = await Http.PostAsync("/api/DischargePatient", content);
+
+		} catch(Exception e) {
+
+			Console.WriteLine(e);
+		}
 	}
 
 }
