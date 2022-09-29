@@ -60,7 +60,7 @@ else
 
 		<MudTextField T="string" Label="Add a Comment" class="mt-8" Variant="Variant.Outlined"  Text="@comment" @bind-Value="@comment" Lines="8" />
 		<MudItem Class="d-flex">
-			<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8" OnClick="(() => AddComment(comment))">Add Comment</MudButton>
+			<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8" OnClick="(() => AddComment())">Add Comment</MudButton>
 			<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Back</MudButton>
 
 		</MudItem>
@@ -93,14 +93,14 @@ else
 		NavigationManager.NavigateTo("/");
 	}
 
-	private void AddComment(string comment)
+	private void AddComment()
 	{
-		Console.WriteLine(comment);
 		Comment commentObj = new Comment();
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
 		patient.CommentHistory.Add(commentObj);
+		Console.WriteLine(comment);
 
 		StateHasChanged();
 	}
