@@ -48,10 +48,10 @@ else
 				@foreach (var comment in patient.CommentHistory)
 				{
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>@comment.DateTimeOfComment.Date</td>
+						<td>@comment.DateTimeOfComment.TimeOfDay</td>
+						<td>@comment.NurseAllocated</td>
+						<td>@comment.CommentDescription</td>
 					</tr>
 				}
 			</tbody>
