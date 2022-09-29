@@ -62,6 +62,7 @@ ILogger log)
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
                 qEntity["Name"] = patient.Name;
                 qEntity["PresentingIssue"] = patient.PresentingIssue;
+
                 qEntity["NurseAllocated"] = patient.NurseAllocated;
                 qEntity["URN"] = patient.URN;
 
