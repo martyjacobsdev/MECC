@@ -167,26 +167,7 @@ else
 	{
 		try
 		{
-
-			Patient patientToDischarge = new Patient();
-
-			// discharge patient from bed
-			foreach (var bed in mecc.Beds)
-			{
-				foreach (var patient in mecc.Patients)
-				{
-					if (patient.PartitionKey == bedId)
-					{
-						patientToDischarge = patient;
-					}
-				}
-			}
-
-
-			Console.WriteLine("Discharging: " + patientToDischarge.Name);
-
-			string json = JsonSerializer.Serialize(patientToDischarge);
-			StringContent content = new StringContent(json);
+			StringContent content = new StringContent(bedId);
 			var result = await Http.PostAsync("/api/DischargePatient", content);
 
 		} catch(Exception e) {

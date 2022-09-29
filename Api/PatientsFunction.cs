@@ -102,12 +102,14 @@ ILogger log)
             try
             {
                 // Update the patient row 
-                Patient patient = await JsonSerializer.DeserializeAsync<Patient>(req.Body);
-                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
-                qEntity["Name"] = null;
-                qEntity["PresentingIssue"] = null;
-                qEntity["NurseAllocated"] = null;
-                qEntity["URN"] = null;
+                string id = req.Query["bedId"];
+                Console.WriteLine("id" + id);
+                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(id, "000" + id);
+
+                qEntity["Name"] = "";
+                qEntity["PresentingIssue"] = "";
+                qEntity["NurseAllocated"] = "";
+                qEntity["URN"] = "";
                 //other values null 
 
                 // Since no UpdateMode was passed, the request will default to Merge.
