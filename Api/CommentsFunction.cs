@@ -49,5 +49,38 @@ namespace BlazorApp.Api
         }
 
 
+        [FunctionName("GetCommentsByURN")]
+        public static IActionResult GetCommentsByURN(
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "DischargePatient/{GetCommentsByURN:string?}")] HttpRequest req, string? URN,
+ILogger log)
+        {
+
+            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
+
+            try
+            {
+                List<TableEntity> qEntities = new List<TableEntity>();
+
+                Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"URN eq '{URN}' ", maxPerPage: 10);
+
+                foreach (Page<TableEntity> page in queryResultsMaxPerPage.AsPages())
+                {
+                    foreach (TableEntity qEntity in page.Values)
+                    {
+                        qEntities.Add(qEntity);
+                    }
+                }
+
+                return new OkObjectResult(qEntities);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return new OkObjectResult(null);
+        }
+
+
     }
 }

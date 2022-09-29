@@ -98,6 +98,7 @@ else
 	private async void AddComment()
 	{
 		Comment commentObj = new Comment();
+
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
@@ -126,6 +127,11 @@ else
 					}
 				}
 			}
+
+			string query = "/api/GetCommentsByURN/" + patient.URN;
+			var result = await Http.GetFromJsonAsync<List<Comment>>(query);
+
+			patient.CommentHistory = result;
 
 		}
 		catch (Exception ex)
