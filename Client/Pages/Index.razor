@@ -182,6 +182,9 @@ else
 				}
 			}
 
+
+			Console.WriteLine("Discharging: " + patientToDischarge.Name);
+
 			string json = JsonSerializer.Serialize(patientToDischarge);
 			StringContent content = new StringContent(json);
 			var result = await Http.PostAsync("/api/DischargePatient", content);
