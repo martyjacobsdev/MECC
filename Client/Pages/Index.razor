@@ -11,9 +11,7 @@
 		<MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
 	</div>
 
-
 }
-
 else
 {
 
@@ -110,6 +108,8 @@ else
 		{
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
+
+			//TODO:  Fix Patients API 
 			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
 
 			foreach(var bed in mecc.Beds) {	
@@ -128,7 +128,6 @@ else
 
 		siteLoaded = true;
 		StateHasChanged();
-
 	}
 
 	public void AdmitNewPatient(string bedId) {
