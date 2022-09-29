@@ -122,8 +122,8 @@ else
 						//marry a bed to a patient 
 						bed.Patient = patient;
 						// set bed property fields
-						mecc.Beds[int.Parse(patient.PartitionKey) + 1].Status = false;
-						mecc.Beds[int.Parse(patient.PartitionKey) + 1].PatientURN = patient.URN;
+						bed.Status = false;
+						bed.PatientURN = patient.URN;
 					} 
 				}
 			}
