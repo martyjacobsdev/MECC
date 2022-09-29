@@ -94,7 +94,7 @@ ILogger log)
 
         [FunctionName("DischargePatient")]
         public static async Task<bool> DischargePatient(
-[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, int bedId,
 ILogger log)
         {
 
@@ -103,9 +103,7 @@ ILogger log)
             try
             {
                 // Update the patient row 
-                string id = req.Query["bedId"];
-                Console.WriteLine("id" + id);
-                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(id, "000" + id);
+                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(bedId.ToString(), "000" + bedId);
 
                 qEntity["Name"] = "";
                 qEntity["PresentingIssue"] = "";
