@@ -116,7 +116,6 @@ else
 		try
 		{
 			List<Patient> patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
-			List<Comment> commentHistory = await localStorage.GetItemAsync<List<Comment>>(patient.URN);
 
 			foreach (var patient in patients)
 			{
@@ -125,12 +124,11 @@ else
 					this.patient = patient;
 					if(patient.CommentHistory == null) {
 						patient.CommentHistory = new List<Comment>();
-					} else {
-						patient.CommentHistory = commentHistory;
-					}
+					} 
 				}
 			}
 
+			await localStorage.SetItemAsync(patient.URN, patient.CommentHistory);
 
 		}
 		catch (Exception ex)
