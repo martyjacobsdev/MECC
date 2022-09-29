@@ -104,7 +104,7 @@ else
 
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
-		commentObj.DateTimeOfComment = DateTime.UtcNow;
+		commentObj.DateTimeOfComment = DateTime.Now;
 		patient.CommentHistory.Add(commentObj);
 
 		await localStorage.SetItemAsync(patient.URN, patient.CommentHistory);
