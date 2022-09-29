@@ -120,6 +120,13 @@ else
 					if (patient.URN == bed.PatientURN)
 					{
 						bed.Patient = patient;
+					} else {
+
+						//patient.PartitionKey - bed Id
+						mecc.Beds[int.Parse(patient.PartitionKey) + 1].Status = false;
+						mecc.Beds[int.Parse(patient.PartitionKey) + 1].PatientURN = patient.URN;
+
+						//async update the bed table
 					}
 				}
 			}
