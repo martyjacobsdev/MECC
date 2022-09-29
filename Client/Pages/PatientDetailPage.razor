@@ -101,7 +101,7 @@ else
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
 		patient.CommentHistory.Add(commentObj);
 
-
+		StateHasChanged();
 	}
 
 	protected override async Task OnInitializedAsync()
