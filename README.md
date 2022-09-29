@@ -32,3 +32,22 @@ There are assumptions I have made which are as follows:
 
 ## Installation and Testing
 
+<b> Required Software </b>
+
+- .NET SDK 6 and above
+- Visual Studio 2022
+- Git
+
+To get started with the project, clone the repository via the command: 
+
+`git clone https://github.com/martyjacobsdev/MECC.git`
+
+⚠️ The project API is currently not testable locally, this will affect the experience of the site.
+
+However, the pages can still be navigated and front-end features, such as form validation and routing can be tested.
+
+<b>Local Development</b>
+
+- Open the BlazorStaticWebApps.sln with Visual Studio 2022 
+- Set multiple startup projects, setting "Client" and "API" as startup projects
+- Build & Run the application 
