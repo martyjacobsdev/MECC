@@ -113,6 +113,8 @@ else
 	}
 
 	public async void GetSummaryInformation() {
+
+		siteLoaded = false;
 		try
 		{
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
