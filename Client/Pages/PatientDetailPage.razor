@@ -48,10 +48,10 @@ else
 				@foreach (var comment in patient.CommentHistory)
 				{
 					<tr>
-						<td>@comment.DateTimeOfComment.Date</td>
-						<td>@comment.DateTimeOfComment.TimeOfDay</td>
-						<td>@comment.NurseAllocated</td>
-						<td>@comment.CommentDescription</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 				}
 			</tbody>
@@ -99,11 +99,9 @@ else
 		commentObj.CommentDescription = comment;
 		commentObj.NurseAllocated = patient.NurseAllocated;
 		commentObj.DateTimeOfComment = DateTime.UtcNow;
-		if (patient.CommentHistory == null) {
-			patient.CommentHistory = new List<Comment>();
-		} else {
 		patient.CommentHistory.Add(commentObj);
-		}
+
+
 	}
 
 	protected override async Task OnInitializedAsync()
@@ -117,6 +115,9 @@ else
 				if (patient.PartitionKey == PathParam)
 				{
 					this.patient = patient;
+					if(patient.CommentHistory == null) {
+						patient.CommentHistory = new List<Comment>();
+					}
 				}
 			}
 
