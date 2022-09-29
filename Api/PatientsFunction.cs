@@ -28,7 +28,7 @@ ILogger log)
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
             List<TableEntity> qEntities = new List<TableEntity>();
 
-            Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '1' or PartitionKey eq '2'", maxPerPage: 10);
+            Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '1' or PartitionKey eq '2' or PartitionKey eq '3' or PartitionKey eq '4' or PartitionKey eq '5' or PartitionKey eq '6' or PartitionKey eq '7' or PartitionKey eq '8'", maxPerPage: 10);
 
             foreach (Page<TableEntity> page in queryResultsMaxPerPage.AsPages())
             {
@@ -52,7 +52,11 @@ ILogger log)
             try
             {
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
+                Console.WriteLine(qEntity["Name"]);
+
                 qEntity["Name"] = Name;
+
+              
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
