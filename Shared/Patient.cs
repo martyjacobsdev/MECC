@@ -24,13 +24,17 @@ namespace BlazorApp.Shared
         [Required]
         [StringLength(7, ErrorMessage = "Patient URN must be 7 characters long.")]
         public string URN { get; set; }
-
+  
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public DateTime? DateOfBirth { get; set; }
 
+        [Required]
         public string PresentingIssue { get; set; }
 
+        [Required]
         public string NurseAllocated { get; set; }
 
         public List<Comment> CommentHistory { get; set; }
