@@ -94,7 +94,7 @@ ILogger log)
 
         [FunctionName("DischargePatient")]
         public static async Task<bool> DischargePatient(
-[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, int bedId,
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "DischargedPatient/{bedId:int?}")] HttpRequest req, int bedId,
 ILogger log)
         {
 
