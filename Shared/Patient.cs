@@ -38,6 +38,15 @@ namespace BlazorApp.Shared
         public string NurseAllocated { get; set; }
 
         public List<Comment> CommentHistory { get; set; }
+
+        public string GetDoB()
+        {
+            if(DateOfBirth != null)
+            {
+                return DateOfBirth.Value.ToShortDateString();
+            }
+            return "";
+        }
         public Comment GetLastComment() {
             Comment lastComment = CommentHistory.FindLast(x => (x.CommentDescription != "Admitted" || x.CommentDescription != "Discharged"));
             return lastComment;
