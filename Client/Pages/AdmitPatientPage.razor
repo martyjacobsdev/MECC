@@ -92,6 +92,8 @@
     {
         success = true;
 
+        Console.WriteLine("The form was submitted successfully.");
+
         // Upsert the Patient (currently supports 8 active patients)
         try
         {
@@ -99,6 +101,9 @@
             NewPatient.RowKey = "000" + BedId?.ToString();
             string query = "/api/UpdatePatient?partitionKey=" + NewPatient.PartitionKey + "&rowKey=" + NewPatient.RowKey + "&newURN=" + NewPatient.URN + "&newName=" + NewPatient.Name + "&newDob=" + NewPatient.DateOfBirth + "&newPresentingIssue=" + NewPatient.PresentingIssue + "&newNurseAllocated=" + NewPatient.NurseAllocated;
             bool success = await Http.GetFromJsonAsync<bool>(query);
+
+            Console.WriteLine("The outcome of the Update Patient API call was - success = ");
+            Console.Write(success);
         }
         catch (Exception ex)
         {
