@@ -26,6 +26,7 @@ else
                 <MudText><b>Name:</b> @patient.Name</MudText>
                 <MudText><b>URN:</b> @patient.URN</MudText>
                 <MudText><b>Date of birth:</b> @patient.DateOfBirth?.Date.ToShortDateString()</MudText>
+                <MudText><b>Bed: @PathParam</b></MudText>
                 <MudText><b>Presenting issue:</b> @patient.PresentingIssue</MudText>
             </MudList>
         </MudPaper>
