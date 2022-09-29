@@ -117,17 +117,14 @@ else
 			{
 				foreach (var patient in mecc.Patients)
 				{
-					if (patient.URN == bed.PatientURN)
+					if (patient.PartitionKey == bed.PartitionKey)
 					{
+						//marry a bed to a patient 
 						bed.Patient = patient;
-					} else {
-
-						//patient.PartitionKey - bed Id
+						// set bed property fields
 						mecc.Beds[int.Parse(patient.PartitionKey) + 1].Status = false;
 						mecc.Beds[int.Parse(patient.PartitionKey) + 1].PatientURN = patient.URN;
-
-						//async update the bed table
-					}
+					} 
 				}
 			}
 
