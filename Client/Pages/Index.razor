@@ -42,8 +42,8 @@ else
 							<td></td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
-								<button class="btn" @onclick="(() => AddComment(bed.PartitionKey))"><u>Add Comment</u></button>
-								<button class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))" style="margin-right: -100px;"><u>Discharge</u></button>
+								<button class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></button>
+								<button class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))" style="margin-top: -25px; display: block;"><u>Discharge</u></button>
 							</td>
 
 						</tr>
