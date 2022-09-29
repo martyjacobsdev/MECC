@@ -49,7 +49,7 @@ ILogger log)
 
         [FunctionName("UpdatePatient")]
         public static async Task<bool> UpdatePatientAsync(
-[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "")] HttpRequest req, 
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "")] HttpRequest req,
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
@@ -115,6 +115,6 @@ ILogger log)
                 return false;
             }
 
-
         }
+    }
 }
