@@ -15,77 +15,80 @@
 else
 {
 
-<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
-	<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
+	<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+		<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
 
-	<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
-		<thead style="background: #173274; color: white;">
-			<tr>
-				@foreach (var h in headings)
+		<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
+			<thead style="background: #173274; color: white;">
+				<tr>
+					@foreach (var h in headings)
+					{
+						<th>@h</th>
+					}
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var bed in mecc.Beds)
 				{
-					<th>@h</th>
+					if (bed.Status == false)
+					{
+						<tr>
+							<td>@bed.PartitionKey</td>
+							<td>@bed.GetStatusLabel()</td>
+							<td>@bed.Patient.Name</td>
+							<td>@bed.Patient.DateOfBirth</td>
+							<td>@bed.Patient.PresentingIssue</td>
+							<td></td>
+							<td></td>
+							<td>@bed.Patient.NurseAllocated</td>
+							<td style="white-space:pre-wrap; word-wrap:break-word">
+								<button class="btn" @onclick="(() => AddComment(bed.PartitionKey))"><u>Add Comment</u></button>
+								<button class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))"><u>Discharge</u></button>
+							</td>
+
+						</tr>
+					}
+					else
+					{
+						<tr>
+							<td>@bed.PartitionKey</td>
+							<td>@bed.GetStatusLabel()</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.PartitionKey))"><u>Admit</u></button></td>
+						</tr>
+					}
 				}
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var bed in mecc.Beds)
-			{
-				if (bed.Status == false)
-				{
-					<tr>
-						<td>@bed.PartitionKey</td>
-						<td>@bed.GetStatusLabel()</td>
-						<td>@bed.Patient.Name</td>
-						<td>@bed.Patient.DateOfBirth</td>
-						<td>@bed.Patient.PresentingIssue</td>
-						<td></td>
-						<td></td>
-						<td>@bed.Patient.NurseAllocated</td>
-						<td>Comment/Discharge</td>
-
-					</tr>
-				}
-				else
-				{
-					<tr>
-						<td>@bed.PartitionKey</td>
-						<td>@bed.GetStatusLabel()</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.PartitionKey))"><u>Admit</u></button></td>
-					</tr>
-				}
-			}
-		</tbody>
-	</MudSimpleTable>
+			</tbody>
+		</MudSimpleTable>
 
 
-	<MudCard Class="d-inline-flex mt-8">
-		<MudCardContent>
-			<MudText>Beds Free</MudText>
-			<MudText Typo="Typo.h2">@mecc.GetBedsFree()</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8">
+			<MudCardContent>
+				<MudText>Beds Free</MudText>
+				<MudText Typo="Typo.h2">@mecc.GetBedsFree()</MudText>
+			</MudCardContent>
+		</MudCard>
 
-	<MudCard Class="d-inline-flex mt-8 ml-4">
-		<MudCardContent>
-			<MudText>Beds In Use</MudText>
-			<MudText Typo="Typo.h2">@mecc.GetBedsInUse()</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8 ml-4">
+			<MudCardContent>
+				<MudText>Beds In Use</MudText>
+				<MudText Typo="Typo.h2">@mecc.GetBedsInUse()</MudText>
+			</MudCardContent>
+		</MudCard>
 
-	<MudCard Class="d-inline-flex mt-8 ml-4">
-		<MudCardContent>
-			<MudText>Patients Today</MudText>
-			<MudText Typo="Typo.h2">@mecc.TotalPatientsToday</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8 ml-4">
+			<MudCardContent>
+				<MudText>Patients Today</MudText>
+				<MudText Typo="Typo.h2">@mecc.TotalPatientsToday</MudText>
+			</MudCardContent>
+		</MudCard>
 
-</MudContainer>
+	</MudContainer>
 
 }
 
@@ -110,9 +113,12 @@ else
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
 			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
 
-			foreach(var bed in mecc.Beds) {	
-				foreach(var patient in mecc.Patients) {
-					if(patient.URN == bed.PatientURN) {
+			foreach (var bed in mecc.Beds)
+			{
+				foreach (var patient in mecc.Patients)
+				{
+					if (patient.URN == bed.PatientURN)
+					{
 						bed.Patient = patient;
 					}
 				}
@@ -128,8 +134,21 @@ else
 		StateHasChanged();
 	}
 
-	public void AdmitNewPatient(string bedId) {
+	public void AdmitNewPatient(string bedId)
+	{
 		NavigationManager.NavigateTo("/admit/" + bedId);
+	}
+
+	public void AddComment(string bedId)
+	{
+		NavigationManager.NavigateTo("/patient-details/" + bedId);
+	}
+
+	public void DischargePatient(string bedId)
+	{
+		// clear patient and bed object
+		// update azure database
+		// add comment 'Discharged'
 	}
 
 }
