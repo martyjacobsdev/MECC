@@ -113,27 +113,24 @@ else
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
 			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
 
-			// marry bed to patients 
-			// set the status correct for bed.Status
-			// assign a Patient URN to bed
-
+			// marry beds to patients 
 			foreach (var bed in mecc.Beds)
 			{
 				foreach (var patient in mecc.Patients)
 				{
 					if (patient.PartitionKey == bed.PartitionKey)
 					{
-						// set bed property fields
-						if (patient.URN != "" || patient.URN != null)
-						{
-							Console.WriteLine(patient.URN);
-							bed.Status = false;
-							bed.PatientURN = patient.URN;
-						}
-
 						//marry a bed to a patient 
 						bed.Patient = patient;
+						bed.PatientURN = patient.URN; 
 					} 
+				}
+			}
+
+			// set the status for the beds
+			foreach(var bed in mecc.Beds) {
+				if(bed.PatientURN != "" && bed.PatientURN != null && bed.PatientURN.Count() > 2) {
+					bed.Status = false;
 				}
 			}
 
