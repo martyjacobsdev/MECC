@@ -43,7 +43,7 @@ namespace BlazorApp.Shared
         {
             if(DateOfBirth != null)
             {
-                return DateOfBirth.Value.ToShortDateString();
+                return DateOfBirth.Value.ToString("dd-MMM-yyyy");
             }
             return "";
         }
