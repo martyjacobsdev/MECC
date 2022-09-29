@@ -109,6 +109,10 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
+		GetSummaryInformation();
+	}
+
+	public async void GetSummaryInformation() {
 		try
 		{
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
@@ -124,18 +128,19 @@ else
 					{
 						//marry a bed to a patient 
 						bed.Patient = patient;
-						bed.PatientURN = patient.URN; 
-					} 
+						bed.PatientURN = patient.URN;
+					}
 				}
 			}
 
 			// set the status for the beds
-			foreach(var bed in mecc.Beds) {
-				if(bed.PatientURN != "" && bed.PatientURN != null && bed.PatientURN.Count() > 2) {
+			foreach (var bed in mecc.Beds)
+			{
+				if (bed.PatientURN != "" && bed.PatientURN != null && bed.PatientURN.Count() > 2)
+				{
 					bed.Status = false;
 				}
 			}
-
 		}
 		catch (Exception ex)
 		{
@@ -145,8 +150,6 @@ else
 		siteLoaded = true;
 		StateHasChanged();
 	}
-
-
 	public void GetPatientDetails(string bedId)
 	{
 		NavigationManager.NavigateTo("/patient-details/" + bedId);
@@ -171,7 +174,7 @@ else
 		{
 			string query = "/api/DischargePatient/" + bedId;
 			var result = await Http.GetAsync(query);
-			StateHasChanged();
+			GetSummaryInformation();
 
 		} catch(Exception e) {
 
