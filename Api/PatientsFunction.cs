@@ -43,20 +43,19 @@ ILogger log)
 
         [FunctionName("UpdatePatient")]
         public static bool UpdatePatient(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, string partitionKey, string rowKey, string newURN, string newName, DateTime? newDob, string newPresentingIssue, string newNurseAllocated, 
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, Patient newPatient, 
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
 
- 
             try
             {
-                Patient entity = tableClient.GetEntity<Patient>(partitionKey, rowKey);
-                entity.URN = newURN;
-                entity.Name = newName;
-                entity.DateOfBirth = newDob;
-                entity.PresentingIssue = newPresentingIssue;
-                entity.NurseAllocated = newNurseAllocated;
+                Patient entity = tableClient.GetEntity<Patient>(newPatient.PartitionKey, newPatient.RowKey);
+                entity.URN = newPatient.URN;
+                entity.Name = newPatient.Name;
+                entity.DateOfBirth = newPatient.DateOfBirth;
+                entity.PresentingIssue = newPatient.PresentingIssue;
+                entity.NurseAllocated = newPatient.NurseAllocated;
 
                 tableClient.UpdateEntity<Patient>(entity, ETag.All, TableUpdateMode.Replace);
                 return true;
