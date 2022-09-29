@@ -8,11 +8,6 @@ namespace BlazorApp.Shared
 {
 	public class Bed : ITableEntity
     {
-		public Bed( bool status, Patient patient)
-		{
-			Status = status;
-			Patient = patient;
-		}
         public string PartitionKey { get; set; }
 
         public string RowKey { get; set; }

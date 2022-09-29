@@ -15,7 +15,7 @@
 else
 {
 
-	<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+	<MudContainer Class="mt-16 mb-8" MaxWidth="MaxWidth.Large">
 		<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
 
 		<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
@@ -112,21 +112,6 @@ else
 			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
 			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
-
-			foreach (var bed in mecc.Beds)
-			{
-				foreach (var patient in mecc.Patients)
-				{
-					if (patient.PartitionKey == bed.PartitionKey)
-					{
-						//marry a bed to a patient 
-						bed.Patient = patient;
-						// set bed property fields
-						bed.Status = false;
-						bed.PatientURN = patient.URN;
-					} 
-				}
-			}
 
 		}
 		catch (Exception ex)
