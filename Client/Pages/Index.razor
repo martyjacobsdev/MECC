@@ -2,6 +2,7 @@
 @using BlazorApp.Shared
 @using System.Text.Json;
 
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
@@ -40,8 +41,8 @@ else
 							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))"><u>@bed.Patient.Name</u></button></td>
 							<td>@bed.Patient.GetDoB()</td>
 							<td>@bed.Patient.PresentingIssue</td>
-							<td></td>
-							<td></td>
+							<td>@bed.Patient.CommentHistory.Last()</td>
+							<td>@mecc.Timestamp</td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
 								<button type="button" class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></button>
@@ -132,6 +133,8 @@ else
 						//marry a bed to a patient 
 						bed.Patient = patient;
 						bed.PatientURN = patient.URN;
+
+					
 					}
 				}
 			}
@@ -144,6 +147,15 @@ else
 					bed.Status = false;
 				}
 			}
+
+			// temporarily set comment history for each patient
+			foreach(var patient in mecc.Patients) {
+				var comments = await localStorage.GetItemAsync<string>(patient.URN);
+				List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+				patient.CommentHistory = patientCommentHistory;
+			}
+
+
 		}
 		catch (Exception ex)
 		{
