@@ -128,10 +128,6 @@ else
 				}
 			}
 
-			string query = "/api/GetCommentsByURN/" + patient.URN;
-			var result = await Http.GetFromJsonAsync<List<Comment>>(query);
-
-			patient.CommentHistory = result;
 
 		}
 		catch (Exception ex)
