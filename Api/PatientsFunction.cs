@@ -75,13 +75,13 @@ ILogger log)
 
                 int? totalAdmittedPatients = meccEntity.GetInt32("TotalPatientsToday");
 
-
                 if (meccEntity.GetDateTime("Timestamp").Value.Date == DateTime.UtcNow.Date)
                 {
                     meccEntity["TotalPatientsToday"] = totalAdmittedPatients + 1;
                 } else
                 {
                     meccEntity["Timestamp"] = DateTime.UtcNow;
+                    meccEntity["TotalPatientsToday"] = 0;
                 }
 
                 // Since no UpdateMode was passed, the request will default to Merge.
