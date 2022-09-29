@@ -63,6 +63,7 @@ ILogger log)
                 qEntity["Name"] = patient.Name;
                 qEntity["PresentingIssue"] = patient.PresentingIssue;
                 qEntity["DateOfBirth"] = patient.DateOfBirth.Value.ToUniversalTime();
+                
                 qEntity["NurseAllocated"] = patient.NurseAllocated;
                 qEntity["URN"] = patient.URN;
 
@@ -74,7 +75,14 @@ ILogger log)
 
                 int? totalAdmittedPatients = meccEntity.GetInt32("TotalPatientsToday");
 
-                meccEntity["TotalPatientsToday"] = totalAdmittedPatients + 1;
+
+                if (meccEntity.GetDateTime("Timestamp").Value.Date == DateTime.UtcNow.Date)
+                {
+                    meccEntity["TotalPatientsToday"] = totalAdmittedPatients + 1;
+                } else
+                {
+                    meccEntity["Timestamp"] = DateTime.UtcNow;
+                }
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await meccTableClient.UpdateEntityAsync(meccEntity, meccEntity.ETag);
