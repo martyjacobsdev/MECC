@@ -49,7 +49,7 @@ else
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var comment in patient.CommentHistory)
+				@foreach (var comment in patientCommentHistory!)
 				{
 					<tr>
 						<td>@comment.DateTimeOfComment.Date</td>
@@ -89,6 +89,7 @@ else
 	public string? comment { get; set; }
 
 	Patient patient = new Patient();
+	List<Comment>? patientCommentHistory = new List<Comment>();
 
 	string[] headings = { "Date", "Time", "Nurse", "Comment" };
 
@@ -127,6 +128,9 @@ else
 					} 
 				}
 			}
+
+			var comments = await localStorage.GetItemAsync<string>(patient.URN);
+			patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
 
 		}
 		catch (Exception ex)
