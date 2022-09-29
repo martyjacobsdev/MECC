@@ -10,40 +10,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
+using System.Collections.Concurrent;
 
 namespace BlazorApp.Api
 {
     public static class PatientsFunction
-	{
+    {
         private const string TableName = "Patients";
 
-        [FunctionName("GetAllPatients")]
-        public static IActionResult GetAllPatients(
+        [FunctionName("Patients")]
+        public static IActionResult Patients(
 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
             List<TableEntity> qEntities = new List<TableEntity>();
 
-            for (int i = 1; i <= 8; i++)
+            Pageable<TableEntity> queryResultsMaxPerPage = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '1'", maxPerPage: 10);
+
+            foreach (Page<TableEntity> page in queryResultsMaxPerPage.AsPages())
             {
-                TableEntity qEntity = tableClient.GetEntity<TableEntity>("Patient000" + i.ToString(), "000" + i.ToString());
-                qEntities.Add(qEntity);
+                foreach (TableEntity qEntity in page.Values)
+                {
+                    qEntities.Add(qEntity);
+                }
             }
 
             return new OkObjectResult(qEntities);
-        }
-
-        [FunctionName("GetPatientByURN")]
-        public static IActionResult GetPatientByURN(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, string urn,
-ILogger log)
-        {
-            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
-
-            TableEntity qEntity = tableClient.GetEntity<TableEntity>("mecc", "0001");
-         
-            return new OkObjectResult(qEntity);
         }
 
 
