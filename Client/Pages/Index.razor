@@ -35,7 +35,7 @@ else
 						<tr>
 							<td>@bed.PartitionKey</td>
 							<td>@bed.GetStatusLabel()</td>
-							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))" style="display: block;"><u>@bed.Patient.Name</u></button></td>
+							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))"><u>@bed.Patient.Name</u></button></td>
 							<td>@bed.Patient.GetDoB()</td>
 							<td>@bed.Patient.PresentingIssue</td>
 							<td></td>
@@ -142,8 +142,6 @@ else
 	public void GetPatientDetails(string bedId)
 	{
 		NavigationManager.NavigateTo("/patient-details/" + bedId);
-		// add +1 to mecc db count
-		// add comment 'Admitted'
 	}
 
 	public void AdmitNewPatient(string bedId)

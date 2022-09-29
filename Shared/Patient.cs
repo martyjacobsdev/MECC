@@ -12,11 +12,6 @@ namespace BlazorApp.Shared
         {
         }
 
-        public Patient(string bed)
-        {
-            Bed = bed;
-        }
-
         public string PartitionKey { get; set; }
 
         public string RowKey { get; set; }
@@ -24,8 +19,6 @@ namespace BlazorApp.Shared
         public DateTimeOffset? Timestamp { get; set; }
 
         public ETag ETag { get; set; }
-
-        public string Bed { get; set; }
 
         public string URN { get; set; }
 

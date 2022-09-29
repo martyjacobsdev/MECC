@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure;
 using System.Collections.Concurrent;
+using BlazorApp.Shared;
 
 namespace BlazorApp.Api
 {
@@ -38,6 +39,32 @@ ILogger log)
             }
 
             return new OkObjectResult(qEntities);
+        }
+
+        [FunctionName("UpdatePatient")]
+        public static bool UpdatePatient(
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, string partitionKey, string rowKey, string newURN, string newName, DateTime? newDob, string newPresentingIssue, string newNurseAllocated, 
+ILogger log)
+        {
+            TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
+
+ 
+            try
+            {
+                Patient entity = tableClient.GetEntity<Patient>(partitionKey, rowKey);
+                entity.URN = newURN;
+                entity.Name = newName;
+                entity.DateOfBirth = newDob;
+                entity.PresentingIssue = newPresentingIssue;
+                entity.NurseAllocated = newNurseAllocated;
+
+                tableClient.UpdateEntity<Patient>(entity, ETag.All, TableUpdateMode.Replace);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
 
