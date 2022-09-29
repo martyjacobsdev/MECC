@@ -52,7 +52,7 @@ ILogger log)
             {
 
                 string partitionKey = req.Query["partitionKey"];
-                string rowKey = req.Query["partitionKey"];
+                string rowKey = req.Query["rowKey"];
 
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
                 qEntity["Name"] = req.Query["newName"];
