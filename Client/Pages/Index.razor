@@ -169,9 +169,9 @@ else
 
 		try
 		{
-			StringContent content = new StringContent(bedId);
-			
-			var result = await Http.PostAsync("/api/DischargePatient", content);
+			string query = "/api/DischargePatient/" + bedId;
+			var result = await Http.GetAsync(query);
+
 			Console.WriteLine(result);
 
 		} catch(Exception e) {
