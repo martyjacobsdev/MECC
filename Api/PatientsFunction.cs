@@ -70,11 +70,9 @@ ILogger log)
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
 
                 // Update the admitted patient count 
-                TableEntity meccEntity = await meccTableClient.GetEntityAsync<TableEntity>("1", "0001");
+                TableEntity meccEntity = await meccTableClient.GetEntityAsync<TableEntity>("mecc", "0001");
 
                 int? totalAdmittedPatients = meccEntity.GetInt32("TotalPatientsToday");
-                Console.WriteLine("It got here");
-                Console.WriteLine(totalAdmittedPatients);
 
                 meccEntity["TotalPatientsToday"] = totalAdmittedPatients + 1;
 
