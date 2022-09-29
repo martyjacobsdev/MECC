@@ -42,7 +42,7 @@ else
 							<td>@bed.Patient.GetDoB()</td>
 							<td>@bed.Patient.PresentingIssue</td>
 							<td>@bed.Patient.CommentHistory.Last().CommentDescription</td>
-							<td>@mecc.Timestamp.Value.LocalDateTime</td>
+							<td>@mecc.Timestamp.Value.LocalDateTime.ToString("dd-MMM-yyyy hh:mm:ss")</td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
 								<button type="button" class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></button>
