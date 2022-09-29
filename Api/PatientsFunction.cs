@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 using Azure;
 using System.Collections.Concurrent;
 using BlazorApp.Shared;
@@ -46,19 +47,17 @@ ILogger log)
 
         [FunctionName("UpdatePatient")]
         public static async Task<bool> UpdatePatientAsync(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "")] HttpRequest req, string partitionKey, string rowKey, string URN, string Name, string DoB, string PresentingIssue, string NurseAllocated,
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "")] HttpRequest req, 
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
 
             try
             {
-                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(partitionKey, rowKey);
-                Console.WriteLine(qEntity["Name"]);
+                Patient patient = await JsonSerializer.DeserializeAsync<Patient>(req.Body);
 
-                qEntity["Name"] = Name;
-
-              
+                TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
+                qEntity["Name"] = patient.Name;
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
@@ -72,21 +71,6 @@ ILogger log)
             }
         }
 
-
-        [FunctionName("PatientTest")]
-        public static async Task<HttpResponseMessage> PatientTest(
-    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "orchestrators/contoso_function01/{id:int}/{username:alpha}")]
-    HttpRequestMessage req,
-    int id,
-    string username,
-    TraceWriter log)
-        {
-            log.Info("C# HTTP trigger function processed a request.");
-
-            return (id == 0 || string.IsNullOrEmpty(username))
-                ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
-                : req.CreateResponse(HttpStatusCode.OK, "Hello " + id + " " + username);
-        }
 
 
 
