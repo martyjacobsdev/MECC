@@ -62,7 +62,7 @@ ILogger log)
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
                 qEntity["Name"] = patient.Name;
                 qEntity["PresentingIssue"] = patient.PresentingIssue;
-                //qEntity["DateOfBirth"] = patient.DateOfBirth.Value.ToUniversalTime();
+                qEntity["DateOfBirth"] = patient.DateOfBirth;
                 qEntity["NurseAllocated"] = patient.NurseAllocated;
                 qEntity["URN"] = patient.URN;
 
@@ -104,8 +104,6 @@ ILogger log)
                 qEntity["PresentingIssue"] = "";
                 qEntity["NurseAllocated"] = "";
                 qEntity["URN"] = "";
-                //qEntity["DateOfBirth"] = "";
-                //qEntity["Timestamp"] = DateTime.UtcNow;
 
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
