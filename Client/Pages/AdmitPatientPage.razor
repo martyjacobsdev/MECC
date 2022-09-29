@@ -1,5 +1,9 @@
 ﻿@page "/admit/{BedId}"
 @using BlazorApp.Shared
+@inject HttpClient Http
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+
 
 @inject NavigationManager NavigationManager
 
@@ -18,8 +22,7 @@
                 </MudItem>
 
                 <MudItem xs="12">
-                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" Label="Date Of Birth" />
-
+                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" @bind-Date="NewPatient.DateOfBirth" Label="Date Of Birth" />
                 </MudItem>
 
                 <MudItem xs="12">
@@ -32,7 +35,7 @@
 
                 <MudItem Class="d-flex">
                  <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Admit Patient</MudButton>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Error" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Cancel</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Back</MudButton>
 
                 </MudItem>
             </MudGrid>
@@ -40,19 +43,12 @@
 
         @if (success)
         {
-            <MudText Color="Color.Success">Success</MudText>
-
-
-            <MudText>New Patient Details</MudText>
-            <MudText>@NewPatient.URN</MudText>
-            <MudText>@NewPatient.DateOfBirth</MudText>
-            <MudText>@NewPatient.Name</MudText>
-            <MudText>@NewPatient.NurseAllocated</MudText>
-            <MudText>@NewPatient.PresentingIssue</MudText>
 
         }
         else
         {
+            <br />
+            <br />
             <MudText Color="@Color.Error">
                 <ValidationSummary />
             </MudText>
@@ -69,12 +65,8 @@
 
 @code {
 
-
-
     [Parameter]
     public string? BedId { get; set; }
-
-    public DateTime? DoB = null;
 
     Patient NewPatient = new Patient();
 
@@ -83,16 +75,31 @@
 
     private void NavigateToHomePage()
     {
-        NewPatient = new Patient(BedId);
+        NewPatient = new Patient();
         NavigationManager.NavigateTo("/");
     }
 
-    private void OnValidSubmit(EditContext context)
+    private async void OnValidSubmit(EditContext context)
     {
         success = true;
-        
-        // add the new patient to the bed
-        //NewPatient.Bed = BedId;
+
+        // Upsert the Patient (currently supports 8 patients)
+        try
+        {
+            NewPatient.PartitionKey = BedId;
+            NewPatient.RowKey = "000" + BedId?.ToString();
+
+            string json = JsonSerializer.Serialize(NewPatient);
+            StringContent content = new StringContent(json);
+            var result = await Http.PostAsync("/api/UpdatePatient", content);
+            NavigationManager.NavigateTo("/");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
 
         StateHasChanged();
     }

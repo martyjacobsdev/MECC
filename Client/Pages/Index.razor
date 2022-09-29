@@ -1,108 +1,188 @@
 ﻿@page "/"
 @using BlazorApp.Shared
+@using System.Text.Json;
+
 @inject NavigationManager NavigationManager
+@inject HttpClient Http
 
 <PageTitle>MECC</PageTitle>
 
-<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
-	<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
+@if (!siteLoaded)
+{
+	<div style="display: flex; justify-content: center; padding: 350px 0;">
+		<MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+	</div>
 
-	<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
-		<thead style="background: #173274; color: white;">
-			<tr>
-				@foreach (var h in headings)
+}
+else
+{
+
+	<MudContainer Class="mt-16 mb-8" MaxWidth="MaxWidth.Large">
+		<MudText Typo="Typo.h2" Align="Align.Center" GutterBottom="true">Summary Information</MudText>
+
+		<MudSimpleTable Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Style="overflow-x: auto;">
+			<thead style="background: #173274; color: white;">
+				<tr>
+					@foreach (var h in headings)
+					{
+						<th>@h</th>
+					}
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var bed in mecc.Beds)
 				{
-					<th>@h</th>
+					if (bed.Status == false)
+					{
+						<tr>
+							<td>@bed.PartitionKey</td>
+							<td>@bed.GetStatusLabel()</td>
+							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))"><u>@bed.Patient.Name</u></button></td>
+							<td>@bed.Patient.GetDoB()</td>
+							<td>@bed.Patient.PresentingIssue</td>
+							<td></td>
+							<td></td>
+							<td>@bed.Patient.NurseAllocated</td>
+							<td style="white-space:pre-wrap; word-wrap:break-word">
+								<button type="button" class="btn" @onclick="(() => AddComment(bed.PartitionKey))" style="display: block;"><u>Add Comment</u></button>
+								<button type="button" class="btn" @onclick="(() => DischargePatient(bed.PartitionKey))" style="margin-top: -25px; display: block;"><u>Discharge</u></button>
+							</td>
+
+						</tr>
+					}
+					else
+					{
+						<tr>
+							<td>@bed.PartitionKey</td>
+							<td>@bed.GetStatusLabel()</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.PartitionKey))"><u>Admit</u></button></td>
+						</tr>
+					}
 				}
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var bed in mecc.Beds)
-			{
-				if (bed.Status == false)
-				{
-					<tr>
-						<td>@bed.Id</td>
-						<td>@bed.GetStatusLabel()</td>
-						<td>@bed.Patient.Name</td>
-						<td>@bed.Patient.DateOfBirth</td>
-						<td>@bed.Patient.PresentingIssue</td>
-						<td></td>
-						<td></td>
-						<td>@bed.Patient.NurseAllocated</td>
-						<td>Comment/Discharge</td>
-
-					</tr>
-				}
-				else
-				{
-					<tr>
-						<td>@bed.Id</td>
-						<td>@bed.GetStatusLabel()</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><button class="btn" @onclick="(() => AdmitNewPatient(bed.Id))"><u>Admit</u></button></td>
-					</tr>
-				}
-			}
-		</tbody>
-	</MudSimpleTable>
+			</tbody>
+		</MudSimpleTable>
 
 
-	<MudCard Class="d-inline-flex mt-8">
-		<MudCardContent>
-			<MudText>Beds Free</MudText>
-			<MudText Typo="Typo.h2">3</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8">
+			<MudCardContent>
+				<MudText>Beds Free</MudText>
+				<MudText Typo="Typo.h2">@mecc.GetBedsFree()</MudText>
+			</MudCardContent>
+		</MudCard>
 
-	<MudCard Class="d-inline-flex mt-8 ml-4">
-		<MudCardContent>
-			<MudText>Beds In Use</MudText>
-			<MudText Typo="Typo.h2">4</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8 ml-4">
+			<MudCardContent>
+				<MudText>Beds In Use</MudText>
+				<MudText Typo="Typo.h2">@mecc.GetBedsInUse()</MudText>
+			</MudCardContent>
+		</MudCard>
 
-	<MudCard Class="d-inline-flex mt-8 ml-4">
-		<MudCardContent>
-			<MudText>Total Patients Admitted Today</MudText>
-			<MudText Typo="Typo.h2">22</MudText>
-		</MudCardContent>
-	</MudCard>
+		<MudCard Class="d-inline-flex mt-8 ml-4">
+			<MudCardContent>
+				<MudText>Patients Today</MudText>
+				<MudText Typo="Typo.h2">@mecc.TotalPatientsToday</MudText>
+			</MudCardContent>
+		</MudCard>
 
-</MudContainer>
+	</MudContainer>
 
+}
 
 
 @code {
+
+	private MaterEmergencyCareCentre mecc = new MaterEmergencyCareCentre();
 
 	private bool dense = false;
 	private bool hover = true;
 	private bool striped = false;
 	private bool bordered = true;
-
-	private MaterEmergencyCareCentre mecc = new MaterEmergencyCareCentre();
+	private bool siteLoaded = false;
 
 	string[] headings = { "Bed", "Status", "Patient", "DOB", "Presenting Issue", "Last comment", "Last update", "Nurse", "Action" };
 
-	string[] rows = {
-		@"1 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"2 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"3 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"4 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"5 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"6 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"7 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
-		@"8 InUse JohnDoe 01-Jan-1980 Nausea,Dizziness Bloodpressurechecked 02-feb-202010:20:22 Mary.P AddCommentLinkDischargeLink",
+	protected override async Task OnInitializedAsync()
+	{
+		GetSummaryInformation();
+	}
 
-	};
+	public async void GetSummaryInformation() {
 
-	public void AdmitNewPatient(int bedId) {
+		siteLoaded = false;
+		try
+		{
+			mecc = await Http.GetFromJsonAsync<MaterEmergencyCareCentre>("/api/SummaryInformation") ?? new MaterEmergencyCareCentre();
+			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
+			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
+
+			// marry beds to patients 
+			foreach (var bed in mecc.Beds)
+			{
+				foreach (var patient in mecc.Patients)
+				{
+					if (patient.PartitionKey == bed.PartitionKey)
+					{
+						//marry a bed to a patient 
+						bed.Patient = patient;
+						bed.PatientURN = patient.URN;
+					}
+				}
+			}
+
+			// set the status for the beds
+			foreach (var bed in mecc.Beds)
+			{
+				if (bed.PatientURN != "" && bed.PatientURN != null && bed.PatientURN.Count() > 2)
+				{
+					bed.Status = false;
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.ToString());
+		}
+
+		siteLoaded = true;
+		StateHasChanged();
+	}
+	public void GetPatientDetails(string bedId)
+	{
+		NavigationManager.NavigateTo("/patient-details/" + bedId);
+	}
+
+	public void AdmitNewPatient(string bedId)
+	{
 		NavigationManager.NavigateTo("/admit/" + bedId);
+		// add comment 'Admitted'
+	}
+
+	public void AddComment(string bedId)
+	{
+		NavigationManager.NavigateTo("/patient-details/" + bedId);
+	}
+
+	public async Task DischargePatient(string bedId)
+	{
+		Console.WriteLine("Discharge Patient Function Called");
+
+		try
+		{
+			string query = "/api/DischargePatient/" + bedId;
+			var result = await Http.GetAsync(query);
+			GetSummaryInformation();
+		
+
+		} catch(Exception e) {
+
+			Console.WriteLine(e);
+		}
 	}
 
 }
