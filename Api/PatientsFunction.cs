@@ -23,6 +23,8 @@ namespace BlazorApp.Api
     public static class PatientsFunction
     {
         private const string TableName = "Patients";
+        private const string MECC = "MaterEmergencyCareCentre";
+
 
         [FunctionName("Patients")]
         public static IActionResult Patients(
@@ -51,11 +53,12 @@ ILogger log)
 ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
+            TableClient meccTableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", MECC);
 
             try
             {
+                // Update the patient row 
                 Patient patient = await JsonSerializer.DeserializeAsync<Patient>(req.Body);
-
                 TableEntity qEntity = await tableClient.GetEntityAsync<TableEntity>(patient.PartitionKey, patient.RowKey);
                 qEntity["Name"] = patient.Name;
                 qEntity["PresentingIssue"] = patient.PresentingIssue;
@@ -65,6 +68,15 @@ ILogger log)
                 // Since no UpdateMode was passed, the request will default to Merge.
                 await tableClient.UpdateEntityAsync(qEntity, qEntity.ETag);
 
+                // Update the admitted patient count 
+                TableEntity meccEntity = await meccTableClient.GetEntityAsync<TableEntity>("1", "0001");
+                string currentTotal = meccEntity["TotalPatientsToday"].ToString();
+                int newTotal = int.Parse(currentTotal) + 1;
+
+                meccEntity["TotalPatientsToday"] = newTotal.ToString();
+
+                // Since no UpdateMode was passed, the request will default to Merge.
+                await meccTableClient.UpdateEntityAsync(meccEntity, meccEntity.ETag);
                 return true;
 
             }
