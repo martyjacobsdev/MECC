@@ -110,7 +110,7 @@ else
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
 
 			//TODO:  Fix Patients API 
-			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
+			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/GetPatientByURN/{}") ?? new List<Patient>();
 
 			foreach(var bed in mecc.Beds) {	
 				foreach(var patient in mecc.Patients) {
