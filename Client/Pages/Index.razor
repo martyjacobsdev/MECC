@@ -41,9 +41,7 @@ else
 							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))"><u>@bed.Patient.Name</u></button></td>
 							<td>@bed.Patient.GetDoB()</td>
 							<td>@bed.Patient.PresentingIssue</td>
-							if(@bed.Patient.CommentHistory != null) {
-								<td>@bed.Patient.CommentHistory.Last().CommentDescription</td>
-							}
+							<td>@bed.Patient.CommentHistory.Last().CommentDescription</td>
 							<td>@mecc.Timestamp.Value.LocalDateTime.ToString("dd-MMM-yyyy hh:mm:ss")</td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
@@ -136,7 +134,7 @@ else
 						bed.Patient = patient;
 						bed.PatientURN = patient.URN;
 
-
+					
 					}
 				}
 			}
@@ -151,14 +149,10 @@ else
 			}
 
 			// temporarily set comment history for each patient
-			try {
-				foreach(var patient in mecc.Patients) {
-					var comments = await localStorage.GetItemAsync<string>(patient.URN);
-					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
-					patient.CommentHistory = patientCommentHistory;
-				}
-			} catch(Exception e) {
-				Console.WriteLine(e);
+			foreach(var patient in mecc.Patients) {
+				var comments = await localStorage.GetItemAsync<string>(patient.URN);
+				List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+				patient.CommentHistory = patientCommentHistory;
 			}
 
 
