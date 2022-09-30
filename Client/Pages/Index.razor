@@ -144,24 +144,23 @@ else
 			{
 				if (bed.PatientURN != "" && bed.PatientURN != null && bed.PatientURN.Count() > 2)
 				{
+
 					bed.Status = false;
+					try
+					{
+						var comments = await localStorage.GetItemAsync<string>(bed.PatientURN);
+						List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+						bed.LastComment = patientCommentHistory.Last().CommentDescription;
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine(e);
+					}
+
 				}
 			}
 
-			// temporarily set comment history for each patient
-			foreach (var patient in mecc.Patients)
-			{
-				if (patient.URN != null)
-				{
-					var comments = await localStorage.GetItemAsync<string>(patient.URN);
-					Console.WriteLine("getItemAsync It got here " + comments);
 
-					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
-
-					Console.WriteLine("Deserialize it got here " + patientCommentHistory);
-					patient.CommentHistory = patientCommentHistory;
-				}
-			}
 
 
 		}
