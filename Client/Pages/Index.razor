@@ -135,7 +135,6 @@ else
 						bed.Patient = patient;
 						bed.PatientURN = patient.URN;
 
-
 					}
 				}
 			}
@@ -155,7 +154,11 @@ else
 				if (patient.URN != null)
 				{
 					var comments = await localStorage.GetItemAsync<string>(patient.URN);
+					Console.WriteLine("getItemAsync It got here " + comments);
+
 					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+
+					Console.WriteLine("Deserialize it got here " + patientCommentHistory);
 					patient.CommentHistory = patientCommentHistory;
 				}
 			}
