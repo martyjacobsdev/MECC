@@ -114,7 +114,8 @@ else
 		await Task.Yield();
 	}
 
-	public async void GetSummaryInformation() {
+	public async void GetSummaryInformation()
+	{
 
 		siteLoaded = false;
 		try
@@ -123,18 +124,18 @@ else
 			mecc.Beds = await Http.GetFromJsonAsync<List<Bed>>("/api/Beds") ?? new List<Bed>();
 			mecc.Patients = await Http.GetFromJsonAsync<List<Patient>>("/api/Patients") ?? new List<Patient>();
 
-			// marry beds to patients 
+			// marry beds to patients
 			foreach (var bed in mecc.Beds)
 			{
 				foreach (var patient in mecc.Patients)
 				{
 					if (patient.PartitionKey == bed.PartitionKey)
 					{
-						//marry a bed to a patient 
+						//marry a bed to a patient
 						bed.Patient = patient;
 						bed.PatientURN = patient.URN;
 
-					
+
 					}
 				}
 			}
@@ -149,10 +150,14 @@ else
 			}
 
 			// temporarily set comment history for each patient
-			foreach(var patient in mecc.Patients) {
-				var comments = await localStorage.GetItemAsync<string>(patient.URN);
-				List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
-				patient.CommentHistory = patientCommentHistory;
+			foreach (var patient in mecc.Patients)
+			{
+				if (patient.URN != null)
+				{
+					var comments = await localStorage.GetItemAsync<string>(patient.URN);
+					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+					patient.CommentHistory = patientCommentHistory;
+				}
 			}
 
 
@@ -190,9 +195,11 @@ else
 			string query = "/api/DischargePatient/" + bedId;
 			var result = await Http.GetAsync(query);
 			GetSummaryInformation();
-		
 
-		} catch(Exception e) {
+
+		}
+		catch (Exception e)
+		{
 
 			Console.WriteLine(e);
 		}
