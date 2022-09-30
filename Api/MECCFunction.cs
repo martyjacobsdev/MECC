@@ -31,7 +31,7 @@ namespace BlazorApp.Api
     ILogger log)
         {
             TableClient tableClient = new TableClient("DefaultEndpointsProtocol=https;AccountName=mecc;AccountKey=g0ccRGdcm9vJFhumv+vIJKhyM6CqJIOq+byy0s4IdXWXwKIOQU9H4wull8bAltEH93FjgD6woHCf+ASt2W4dUg==;EndpointSuffix=core.windows.net", TableName);
-           
+
             TableEntity qEntity = tableClient.GetEntity<TableEntity>("mecc", "0001");
 
             return new OkObjectResult(qEntity);

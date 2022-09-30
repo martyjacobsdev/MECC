@@ -8,101 +8,50 @@
 @inject NavigationManager NavigationManager
 
 <EditForm Model="NewPatient" OnValidSubmit=OnValidSubmit>
-    <DataAnnotationsValidator />
+	<DataAnnotationsValidator />
 
-<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Admit New Patient to Bed @BedId</MudText>
-    <MudItem Class="mt-16">
-            <MudGrid Align="Align.Center">
-                <MudItem xs="12">
-                    <MudTextField T="string" Label="Patient URN" @bind-Value="NewPatient.URN" For="@(() => NewPatient.URN)" />
-                </MudItem>
-                <MudItem xs="12">
-                    <MudTextField T="string" Label="Name" @bind-Value="NewPatient.Name" For="@(() => NewPatient.Name)" />
-                </MudItem>
+	<MudContainer Class="mt-16" MaxWidth="MaxWidth.Large">
+		<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Admit New Patient to Bed @BedId</MudText>
+		<MudItem Class="mt-16">
+			<MudGrid Align="Align.Center">
+				<MudItem xs="12">
+					<MudTextField T="string" Label="Patient URN" @bind-Value="NewPatient.URN" For="@(() => NewPatient.URN)" />
+				</MudItem>
+				<MudItem xs="12">
+					<MudTextField T="string" Label="Name" @bind-Value="NewPatient.Name" For="@(() => NewPatient.Name)" />
+				</MudItem>
 
-                <MudItem xs="12">
-                    <MudDatePicker For="@(() => NewPatient.DateOfBirth)" @bind-Date="NewPatient.DateOfBirth" Label="Date Of Birth" />
-                </MudItem>
+				<MudItem xs="12">
+					<MudDatePicker For="@(() => NewPatient.DateOfBirth)" @bind-Date="NewPatient.DateOfBirth" Label="Date Of Birth" />
+				</MudItem>
 
-                <MudItem xs="12">
-                    <MudTextField T="string" Label="Presenting Issue" @bind-Value="NewPatient.PresentingIssue" For="@(() => NewPatient.PresentingIssue)" />
-                </MudItem>
+				<MudItem xs="12">
+					<MudTextField T="string" Label="Presenting Issue" @bind-Value="NewPatient.PresentingIssue" For="@(() => NewPatient.PresentingIssue)" />
+				</MudItem>
 
-                <MudItem xs="12">
-                    <MudTextField T="string" Label="Nurse Allocated" @bind-Value="NewPatient.NurseAllocated" For="@(() => NewPatient.NurseAllocated)" />
-                </MudItem>
+				<MudItem xs="12">
+					<MudTextField T="string" Label="Nurse Allocated" @bind-Value="NewPatient.NurseAllocated" For="@(() => NewPatient.NurseAllocated)" />
+				</MudItem>
 
-                <MudItem Class="d-flex">
-                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Admit Patient</MudButton>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Back</MudButton>
+				<MudItem Class="d-flex">
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="mt-8">Admit Patient</MudButton>
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary" Size="Size.Large" Class="ml-8 mt-8" OnClick="NavigateToHomePage">Back</MudButton>
 
-                </MudItem>
-            </MudGrid>
-        </MudItem>
+				</MudItem>
+			</MudGrid>
+		</MudItem>
 
-        @if (success)
-        {
+		@if (!success)
+		{
+			<br />
+			<br />
+			<MudText Color="@Color.Error">
+				<ValidationSummary />
+			</MudText>
+		}
 
-        }
-        else
-        {
-            <br />
-            <br />
-            <MudText Color="@Color.Error">
-                <ValidationSummary />
-            </MudText>
-        }
-
-
-</MudContainer>
+	</MudContainer>
 
 </EditForm>
 
 
-
-
-
-@code {
-
-    [Parameter]
-    public string? BedId { get; set; }
-
-    Patient NewPatient = new Patient();
-
-    bool success;
-
-
-    private void NavigateToHomePage()
-    {
-        NewPatient = new Patient();
-        NavigationManager.NavigateTo("/");
-    }
-
-    private async void OnValidSubmit(EditContext context)
-    {
-        success = true;
-
-        // Upsert the Patient (currently supports 8 patients)
-        try
-        {
-            NewPatient.PartitionKey = BedId;
-            NewPatient.RowKey = "000" + BedId?.ToString();
-
-            string json = JsonSerializer.Serialize(NewPatient);
-            StringContent content = new StringContent(json);
-            var result = await Http.PostAsync("/api/UpdatePatient", content);
-            NavigationManager.NavigateTo("/");
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
-
-
-        StateHasChanged();
-    }
-
-
-}

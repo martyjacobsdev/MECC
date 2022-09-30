@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace BlazorApp.Api
 {
-	public static class BedsFunction
-	{
+    public static class BedsFunction
+    {
         private const string TableName = "Beds";
 
         [FunctionName("Beds")]
