@@ -153,8 +153,10 @@ else
 			// temporarily set comment history for each patient
 			foreach(var patient in mecc.Patients) {
 				var comments = await localStorage.GetItemAsync<string>(patient.URN);
-				List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
-				patient.CommentHistory = patientCommentHistory;
+				if(comments != null) {
+					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
+					patient.CommentHistory = patientCommentHistory;
+				}
 			}
 
 
