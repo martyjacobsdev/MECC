@@ -9,10 +9,6 @@ namespace BlazorApp.Shared
 {
     public class Patient : ITableEntity
     {
-        public Patient()
-        {
-        }
-
         public string PartitionKey { get; set; }
 
         public string RowKey { get; set; }

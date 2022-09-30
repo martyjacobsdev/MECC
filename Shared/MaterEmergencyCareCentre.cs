@@ -8,10 +8,6 @@ namespace BlazorApp.Shared
 {
     public class MaterEmergencyCareCentre : ITableEntity
     {
-        public MaterEmergencyCareCentre()
-        {
-            Beds = new List<Bed>();
-        }
         public string PartitionKey { get; set; }
 
         public string RowKey { get; set; }

@@ -41,7 +41,7 @@ else
 							<td><button class="btn" @onclick="(() => GetPatientDetails(bed.PartitionKey))"><u>@bed.Patient.Name</u></button></td>
 							<td>@bed.Patient.GetDoB()</td>
 							<td>@bed.Patient.PresentingIssue</td>
-							<td></td>
+							<td>@bed.Patient.CommentHistory[^1].CommentDescription</td>
 							<td>@mecc.Timestamp.Value.LocalDateTime.ToString("dd-MMM-yyyy hh:mm:ss")</td>
 							<td>@bed.Patient.NurseAllocated</td>
 							<td style="white-space:pre-wrap; word-wrap:break-word">
