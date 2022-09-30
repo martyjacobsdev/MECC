@@ -18,6 +18,9 @@ namespace BlazorApp.Shared
 
         public string PatientURN { get; set; }
 
+        public string LastComment { get; set; }
+
+
         public bool Status { get; set; }
 
         public Patient Patient { get; set; }
