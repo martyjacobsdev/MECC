@@ -136,7 +136,7 @@ else
 						bed.Patient = patient;
 						bed.PatientURN = patient.URN;
 
-					
+
 					}
 				}
 			}
@@ -151,12 +151,14 @@ else
 			}
 
 			// temporarily set comment history for each patient
-			foreach(var patient in mecc.Patients) {
-				var comments = await localStorage.GetItemAsync<string>(patient.URN);
-				if(comments != null) {
+			try {
+				foreach(var patient in mecc.Patients) {
+					var comments = await localStorage.GetItemAsync<string>(patient.URN);
 					List<Comment>? patientCommentHistory = JsonSerializer.Deserialize<List<Comment>>(comments);
 					patient.CommentHistory = patientCommentHistory;
 				}
+			} catch(Exception e) {
+				Console.WriteLine(e);
 			}
 
 
