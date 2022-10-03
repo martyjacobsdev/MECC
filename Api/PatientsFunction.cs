@@ -81,7 +81,7 @@ ILogger log)
                 else
                 {
                     meccEntity["Timestamp"] = DateTime.UtcNow;
-                    meccEntity["TotalPatientsToday"] = 0;
+                    meccEntity["TotalPatientsToday"] = 1;
                 }
 
                 // Since no UpdateMode was passed, the request will default to Merge.
